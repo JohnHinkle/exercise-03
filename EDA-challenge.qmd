@@ -1,5 +1,5 @@
 ---
-title: "EDA-challenge"
+title: "Exercise 03: EDA-challenge"
 author: "John Hinkle"
 format: html
 editor: visual
