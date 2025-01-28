@@ -87,6 +87,31 @@ ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) +
   facet_wrap(~Family)
 ```
 
+Plot of canine size dimorphism vs body size dimorphism, overall
+
+```{r}
+ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) + 
+  geom_point(color="#BF5700")
+```
+
+Plot of canine size dimorphism vs body size dimorphism, by Family
+
+```{r}
+ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) + 
+  geom_point(color="#BF5700") +
+  facet_wrap(~Family)
+```
+
+```{r}
+d <- mutate(d, diet = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >= 50, "folivore",
+    ifelse(Fruit < 50 & Leaves < 50, "omnivore", NA))))
+```
+
+
+```{r}
+
+```
+
 You can add options to executable code like this
 
 ```{r}
