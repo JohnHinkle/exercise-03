@@ -108,8 +108,8 @@ ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) +
   facet_wrap(~Family)
 ```
 
-
 ### Create diet_strategy variable
+
 ```{r}
 d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >= 50, "folivore",
     ifelse(Fruit < 50 & Leaves < 50, "omnivore", NA))))
@@ -118,12 +118,3 @@ d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >=
 ```{r}
 
 ```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
