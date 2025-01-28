@@ -14,6 +14,7 @@ Quarto enables you to weave together content and executable code into a finished
 ```{r}
 library(tidyverse)
 library(magrittr)
+library(ggplot2)
 ```
 
 ### Loading data file
@@ -49,6 +50,34 @@ home_range_area <- d$HomeRange_km2
 home_range_diamater <- (sqrt(home_range_area/pi))*2
 di <- day_range_length / home_range_diamater
 d <- mutate(d, DI = di)
+```
+
+Plot of day range length vs time spent moving, overall
+
+```{r}
+ggplot(d, aes(x=Move, y=DayLength_km)) + 
+  geom_point()
+```
+
+Plot of day range length vs time spent moving, by Family
+
+```{r}
+ggplot(d, aes(x=Move, y=DayLength_km)) + 
+  geom_point() +
+  facet_wrap(~Family)
+```
+
+Plot of day range length vs group size, overall
+```{r}
+ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
+  geom_point()
+```
+
+Plot of day range length vs group size, by Family
+```{r}
+ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
+  geom_point() +
+  facet_wrap(~Family)
 ```
 
 You can add options to executable code like this
