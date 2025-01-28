@@ -24,7 +24,7 @@ f <- "/Users/jeh5663/Documents/exercise-03/data-wrangling.csv"
 d <- read_csv(f, col_names = TRUE)
 ```
 
-Create BSD variable
+### Create BSD variable
 
 ```{r}
 bmmm <- d$Body_mass_male_mean
@@ -33,7 +33,7 @@ bsd <- bmmm / bmfm
 d <- mutate(d, BSD = bsd)
 ```
 
-Create sex_ratio variable
+### Create sex_ratio variable
 
 ```{r}
 females <- d$AdultFemale
@@ -42,7 +42,7 @@ sr <- females / males
 d <- mutate(d, sex_ratio = sr)
 ```
 
-Create DI variable (ratio of day range length to the diameter of the home range)
+### Create DI variable (ratio of day range length to the diameter of the home range)
 
 ```{r}
 day_range_length <- d$DayLength_km
@@ -52,7 +52,9 @@ di <- day_range_length / home_range_diamater
 d <- mutate(d, DI = di)
 ```
 
-Plot of day range length vs time spent moving, overall
+### Plot of day range length vs time spent moving
+
+Overall
 
 ```{r}
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
@@ -64,7 +66,7 @@ ggplot(d, aes(x=Move, y=DayLength_km)) +
   scale_y_log10()
 ```
 
-Plot of day range length vs time spent moving, by Family
+by Family
 
 ```{r}
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
@@ -72,14 +74,16 @@ ggplot(d, aes(x=Move, y=DayLength_km)) +
   facet_wrap(~Family)
 ```
 
-Plot of day range length vs group size, overall
+### Plot of day range length vs group size
+
+Overall
 
 ```{r}
 ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
   geom_point(color="#BF5700")
 ```
 
-Plot of day range length vs group size, by Family
+by Family
 
 ```{r}
 ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
@@ -87,14 +91,16 @@ ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) +
   facet_wrap(~Family)
 ```
 
-Plot of canine size dimorphism vs body size dimorphism, overall
+### Plot of canine size dimorphism vs body size dimorphism
+
+Overall
 
 ```{r}
 ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) + 
   geom_point(color="#BF5700")
 ```
 
-Plot of canine size dimorphism vs body size dimorphism, by Family
+by Family
 
 ```{r}
 ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) + 
@@ -102,11 +108,12 @@ ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) +
   facet_wrap(~Family)
 ```
 
+
+### Create diet_strategy variable
 ```{r}
-d <- mutate(d, diet = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >= 50, "folivore",
+d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >= 50, "folivore",
     ifelse(Fruit < 50 & Leaves < 50, "omnivore", NA))))
 ```
-
 
 ```{r}
 
