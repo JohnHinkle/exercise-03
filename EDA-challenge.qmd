@@ -56,27 +56,34 @@ Plot of day range length vs time spent moving, overall
 
 ```{r}
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
-  geom_point()
+  geom_point(color="#BF5700")
+
+ggplot(d, aes(x=Move, y=DayLength_km)) + 
+  geom_point(color="#BF5700") +
+  scale_x_log10() +
+  scale_y_log10()
 ```
 
 Plot of day range length vs time spent moving, by Family
 
 ```{r}
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
-  geom_point() +
+  geom_point(color="#BF5700") +
   facet_wrap(~Family)
 ```
 
 Plot of day range length vs group size, overall
+
 ```{r}
 ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
-  geom_point()
+  geom_point(color="#BF5700")
 ```
 
 Plot of day range length vs group size, by Family
+
 ```{r}
 ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
-  geom_point() +
+  geom_point(color="#BF5700") +
   facet_wrap(~Family)
 ```
 
