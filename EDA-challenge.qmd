@@ -115,6 +115,18 @@ d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >=
     ifelse(Fruit < 50 & Leaves < 50, "omnivore", NA))))
 ```
 
-```{r}
+### Create a boxplot of group size vs diet_strategy
 
+```{r}
+ggplot(d, aes(x=diet_strategy, y=MeanGroupSize)) +
+  geom_boxplot()
 ```
+
+### Create Binomial variable
+```{r}
+d <- mutate(d, Binomial = paste(Genus, Species, sep = " ")) |>
+  select(d, Binomial, Family, Brain_size_species_mean, Body_mass_male_mean) |>
+  group_by(d, Family) |>
+  
+```
+
