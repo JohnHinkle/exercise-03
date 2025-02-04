@@ -40,6 +40,7 @@ d <- mutate(d, sex_ratio = sr) # add sex ratio to data set
 ```
 
 ### 3) Create 'DI' variable
+
 DI or defensibility index is the ratio of day range length to the diameter of the home range
 
 ```{r}
@@ -57,7 +58,11 @@ Overall plot
 ```{r}
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
   geom_point(color="#BF5700") # plot points in burnt orange (for fun)
+```
 
+Let's try log transforming both variables and plotting them. This yields a more linear relationship. The relationship is positive, which suggests that primates that move farther tend to spend more time moving.
+
+```{r}
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
   geom_point(color="#BF5700") +
   scale_x_log10() +
@@ -72,20 +77,51 @@ ggplot(d, aes(x=Move, y=DayLength_km)) +
   facet_wrap(~Family)
 ```
 
+Now, log transform each variable to see if any linear trends appear.
+
+```{r}
+ggplot(d, aes(x=Move, y=DayLength_km)) + 
+  geom_point(color="#BF5700") +
+  scale_x_log10() +
+  scale_y_log10() +
+  facet_wrap(~Family)
+```
+
+Based on both of these plots, it the linear trend breaks down when you plot by taxonomic Family. There is a semblance of a positive linear relationship for Family Atelidae. This family of New World monkeys includes spider and howler monkeys.
+
 ### 5) Plot of day range length vs group size
 
-Overall
+Overall. There is a semblance of a positive linear trend, but lets transform the variables and re-plot.
 
 ```{r}
 ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
   geom_point(color="#BF5700")
 ```
 
-Plots for each taxonomic Family
+Log transformed. The positive linear relationship *appears* stronger. This supports the idea that species that travel further tend to live in larger groups. Perhaps those larger groups feel safer, allowing them to travel further.
 
 ```{r}
 ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
   geom_point(color="#BF5700") +
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+Plots for each taxonomic Family, untransformed
+
+```{r}
+ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
+  geom_point(color="#BF5700") +
+  facet_wrap(~Family)
+```
+
+After transforming both variables, it seems like the positive linear trend also shows up for several taxonomic families. This trend is observed for New World families (ex. Atelidae) and Old World (ex. Cercopithecidae)
+
+```{r}
+ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
+  geom_point(color="#BF5700") +
+  scale_x_log10() +
+  scale_y_log10() +
   facet_wrap(~Family)
 ```
 
@@ -106,7 +142,8 @@ ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) +
   facet_wrap(~Family)
 ```
 
-### 7a) Create diet_strategy variable
+### 7a) Create 'diet_strategy' variable
+
 Frugivore, Folivore, or Omnivore
 
 ```{r}
@@ -114,7 +151,7 @@ d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >=
     ifelse(Fruit < 50 & Leaves < 50, "omnivore", NA))))
 ```
 
-### 7b) Create a boxplot of group size vs diet_strategy
+### 7b) Create a box plot of group size vs diet strategy
 
 ```{r}
 ggplot(drop_na(d, diet_strategy), aes(x= diet_strategy, y= MeanGroupSize)) +
@@ -131,4 +168,3 @@ print (d <- mutate(d, Binomial = paste(Genus, Species, sep = " ")) |> # create '
     avgMBM = mean(Body_mass_male_mean, na.rm = TRUE)) |> # calculate average brain size and average male body mass
   arrange(avgBS)) # sort by increasing brain size
 ```
-
