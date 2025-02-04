@@ -142,9 +142,11 @@ ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) +
   facet_wrap(~Family)
 ```
 
+It appears that canine size dimorphism increases as body size dimorphism increases across all taxa and for some taxonomic families (i.e., Cebidae, Cercopithecidae*).* Interestingly, there appears to be a negative relationship (canine size dimorphism decreasing as body size dimorphism increases) among Family Atelidae, which can be investigated with future analyses.
+
 ### 7a) Create 'diet_strategy' variable
 
-Frugivore, Folivore, or Omnivore
+Is a primate a Frugivore, Folivore, or Omnivore?
 
 ```{r}
 d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >= 50, "folivore",
@@ -153,10 +155,15 @@ d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >=
 
 ### 7b) Create a box plot of group size vs diet strategy
 
+Do frugivores live in larger groups than folivores?
+
 ```{r}
+# use 'drop_na()' function to remove NA values/category from diet_strategy
 ggplot(drop_na(d, diet_strategy), aes(x= diet_strategy, y= MeanGroupSize)) +
   geom_boxplot(color="#BF5700")
 ```
+
+Based on the box plots above, mean group size is very similar across the three diet strategies. To answer our earlier question: **No**, frugivores **do not** live larger groups than folivores based on the median average group size. Actually, the median average group size is slightly smaller for frugivores. Frugivores **do** have a [greater range]{.underline} of group sizes than folivores.
 
 ### 8) {dplyr} and pipe exercise
 
