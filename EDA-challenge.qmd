@@ -7,58 +7,56 @@ editor: visual
 
 ## Exercise 03
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-### Load packages
+### Load the necessary packages
 
 ```{r}
 library(tidyverse)
-library(magrittr)
 library(ggplot2)
 ```
 
-### Loading data file
+### Load in the data file
 
 ```{r}
 f <- "/Users/jeh5663/Documents/exercise-03/data-wrangling.csv"
 d <- read_csv(f, col_names = TRUE)
 ```
 
-### Create BSD variable
+### 1) Create the 'BSD' (body size dimorphism) variable
 
 ```{r}
-bmmm <- d$Body_mass_male_mean
-bmfm <- d$Body_mass_female_mean
-bsd <- bmmm / bmfm
-d <- mutate(d, BSD = bsd)
+bmmm <- d$Body_mass_male_mean # male body mass
+bmfm <- d$Body_mass_female_mean # female body mass
+bsd <- bmmm / bmfm # calculate body size dimorphism
+d <- mutate(d, BSD = bsd) # add body size dimorphism to data set
 ```
 
-### Create sex_ratio variable
+### 2) Create the 'sex_ratio' variable
 
 ```{r}
-females <- d$AdultFemale
-males <- d$AdultMales
-sr <- females / males
-d <- mutate(d, sex_ratio = sr)
+females <- d$AdultFemale # quantity of females
+males <- d$AdultMales # quantity of males
+sr <- females / males # calculate sex ratio
+d <- mutate(d, sex_ratio = sr) # add sex ratio to data set
 ```
 
-### Create DI variable (ratio of day range length to the diameter of the home range)
+### 3) Create 'DI' variable
+DI or defensibility index is the ratio of day range length to the diameter of the home range
 
 ```{r}
-day_range_length <- d$DayLength_km
-home_range_area <- d$HomeRange_km2
-home_range_diamater <- (sqrt(home_range_area/pi))*2
-di <- day_range_length / home_range_diamater
-d <- mutate(d, DI = di)
+day_range_length <- d$DayLength_km # day range length
+home_range_area <- d$HomeRange_km2 # day range area
+home_range_diamater <- (sqrt(home_range_area/pi))*2 # calculate day range diameter
+di <- day_range_length / home_range_diamater # calculate defensibility index
+d <- mutate(d, DI = di) # add defensibility index to data set
 ```
 
-### Plot of day range length vs time spent moving
+### 4) Plot of day range length vs time spent moving
 
-Overall
+Overall plot
 
 ```{r}
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
-  geom_point(color="#BF5700")
+  geom_point(color="#BF5700") # plot points in burnt orange (for fun)
 
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
   geom_point(color="#BF5700") +
@@ -66,7 +64,7 @@ ggplot(d, aes(x=Move, y=DayLength_km)) +
   scale_y_log10()
 ```
 
-by Family
+Plots for each taxonomic Family
 
 ```{r}
 ggplot(d, aes(x=Move, y=DayLength_km)) + 
@@ -74,7 +72,7 @@ ggplot(d, aes(x=Move, y=DayLength_km)) +
   facet_wrap(~Family)
 ```
 
-### Plot of day range length vs group size
+### 5) Plot of day range length vs group size
 
 Overall
 
@@ -83,7 +81,7 @@ ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) +
   geom_point(color="#BF5700")
 ```
 
-by Family
+Plots for each taxonomic Family
 
 ```{r}
 ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) + 
@@ -91,7 +89,7 @@ ggplot(d, aes(x=MeanGroupSize, y=DayLength_km)) +
   facet_wrap(~Family)
 ```
 
-### Plot of canine size dimorphism vs body size dimorphism
+### 6) Plot of canine size dimorphism vs body size dimorphism
 
 Overall
 
@@ -100,7 +98,7 @@ ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) +
   geom_point(color="#BF5700")
 ```
 
-by Family
+Plots for each taxonomic Family
 
 ```{r}
 ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) + 
@@ -108,25 +106,29 @@ ggplot(d, aes(x=BSD, y=Canine_Dimorphism)) +
   facet_wrap(~Family)
 ```
 
-### Create diet_strategy variable
+### 7a) Create diet_strategy variable
+Frugivore, Folivore, or Omnivore
 
 ```{r}
 d <- mutate(d, diet_strategy = ifelse(Fruit >= 50, "frugivore", ifelse(Leaves >= 50, "folivore",
     ifelse(Fruit < 50 & Leaves < 50, "omnivore", NA))))
 ```
 
-### Create a boxplot of group size vs diet_strategy
+### 7b) Create a boxplot of group size vs diet_strategy
 
 ```{r}
-ggplot(d, aes(x=diet_strategy, y=MeanGroupSize)) +
-  geom_boxplot()
+ggplot(drop_na(d, diet_strategy), aes(x= diet_strategy, y= MeanGroupSize)) +
+  geom_boxplot(color="#BF5700")
 ```
 
-### Create Binomial variable
+### 8) {dplyr} and pipe exercise
+
 ```{r}
-d <- mutate(d, Binomial = paste(Genus, Species, sep = " ")) |>
-  select(d, Binomial, Family, Brain_size_species_mean, Body_mass_male_mean) |>
-  group_by(d, Family) |>
-  
+print (d <- mutate(d, Binomial = paste(Genus, Species, sep = " ")) |> # create 'Binomial' variable and add to df
+  select(Binomial, Family, Brain_Size_Species_Mean, Body_mass_male_mean) |> # trim df
+  group_by(Family) |> # Group by 'Family'
+  summarize(n_cases = n(), avgBS = mean(Brain_Size_Species_Mean, na.rm = TRUE),
+    avgMBM = mean(Body_mass_male_mean, na.rm = TRUE)) |> # calculate average brain size and average male body mass
+  arrange(avgBS)) # sort by increasing brain size
 ```
 
